@@ -31,9 +31,28 @@ personal/literary site, not an application.
 - Hosted on **GitHub Pages**. The repo is named `sonaroddur.github.com` (the
   legacy GitHub user-site convention); GitHub serves it at the clean root URL
   **https://sonaroddur.github.io/**.
-- Pages source = **`main` branch, root path**. **Pushing to `main` auto-rebuilds
-  and redeploys (~1 minute).** There is no CI and no other branch.
-- After pushing content, hard-refresh to bypass the browser/CDN cache.
+- Pages source = **`main` branch, root path**. Updating `main` (via a merged PR)
+  auto-rebuilds and redeploys (~1 minute). Only `main` is published — feature
+  branches never affect the live site.
+- After a deploy, hard-refresh to bypass the browser/CDN cache.
+
+## Contributing — git workflow (IMPORTANT)
+
+`main` is the **live** branch: GitHub Pages publishes it automatically (see
+*Hosting / deploy* above). To protect the live site, **every** change — content
+or code, however small — follows this flow:
+
+1. **Never commit or push directly to `main`.** No exceptions, not even a
+   one-line fix or a typo.
+2. **Work on a feature branch** (e.g. `add-poem-<slug>`, `fix/...`, `docs/...`).
+3. **Get the owner's review and approval BEFORE opening a PR.** Prepare the
+   change on the branch, show the diff and a short summary, and wait for an
+   explicit go-ahead. Do **not** run `gh pr create` until then.
+4. **Then open a Pull Request into `main`.** Merging the PR is what deploys to
+   the live site.
+
+Two gates stand before anything goes live: the owner reviews the change *before*
+the PR is opened, and the PR merge is the final gate.
 
 ## How to add the poet's work
 
@@ -73,6 +92,8 @@ example that shows the exact pattern to copy:
 
 - Keep it a **single self-contained `index.html`** — no external JS/CSS deps
   beyond Google Fonts, no framework, no bundler.
-- Commit and push to `main` to publish. Do **not** commit `.DS_Store` (gitignored).
+- Changes reach the live site only through a reviewed PR into `main` (see
+  *Contributing — git workflow*) — never commit to `main` directly. Do **not**
+  commit `.DS_Store` (gitignored).
 - The social-share meta tags (Open Graph / Twitter) live in `<head>`; their
   absolute URLs must stay `https://sonaroddur.github.io/...`.

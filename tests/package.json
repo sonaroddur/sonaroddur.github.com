@@ -1,0 +1,12 @@
+{
+  "name": "sona-roddur-tests",
+  "private": true,
+  "version": "1.0.0",
+  "description": "End-to-end tests for the Sona Roddur site",
+  "scripts": {
+    "test": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.0"
+  }
+}

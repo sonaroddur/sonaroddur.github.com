@@ -1,0 +1,205 @@
+/* =============================================================
+   Sona Roddur — "Rings of Light" preview design system
+   Shared by the front door and the individual reading pages.
+   ============================================================= */
+:root{
+  --paper:#FBF6EC; --paper-2:#F4EBD8; --ink:#221C13; --ink-soft:#5A4B36;
+  --gold:#BE8527; --gold-bright:#EAC97F; --forest:#18352A; --forest-2:#0C1A14;
+  --forest-3:#06100C; --cream:#F1E7D2; --sage:#6F8A5E;
+  --font-display:'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-body:'Spectral', Georgia, serif;
+  --font-bn:'Noto Serif Bengali', 'Kohinoor Bangla', 'Nirmala UI', serif;
+}
+*{ box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+body{ margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body); font-size:18px; line-height:1.7; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
+.bengali{ font-family:var(--font-bn); }
+::selection{ background:var(--gold-bright); color:var(--ink); }
+img{ max-width:100%; }
+a{ color:inherit; }
+
+/* language swap — force-hide the inactive language so it always wins */
+[data-lang="en"] .lang-bn{ display:none !important; }
+[data-lang="bn"] .lang-en{ display:none !important; }
+a:focus-visible, button:focus-visible{ outline:2px solid var(--gold); outline-offset:3px; border-radius:2px; }
+
+.wrap{ max-width:66rem; margin-inline:auto; }
+.eyebrow{ text-align:center; font-family:var(--font-display); font-weight:500; font-size:clamp(1.5rem,3.6vw,2.1rem); color:inherit; margin:0; }
+.eyebrow .bengali{ font-family:var(--font-bn); font-weight:600; }
+.eyebrow .dot{ color:var(--gold); padding:0 .4em; font-weight:400; }
+.lede{ text-align:center; max-width:34rem; margin:.9rem auto 0; color:var(--ink-soft); font-style:italic; font-size:1.02rem; }
+.lede.bengali{ font-family:var(--font-bn); font-style:normal; }
+.divider{ color:var(--gold); display:flex; justify-content:center; margin:1.2rem auto 0; }
+.divider svg{ display:block; }
+
+/* header */
+.site-header{ position:sticky; top:0; z-index:50; background:rgba(8,18,13,.72); -webkit-backdrop-filter:blur(9px) saturate(120%); backdrop-filter:blur(9px) saturate(120%); border-bottom:1px solid rgba(234,201,127,.16); }
+.site-header.on-light{ background:rgba(251,246,236,.86); border-bottom:1px solid #E2D5BA; }
+.nav{ max-width:66rem; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:.7rem 1.5rem; }
+.brand{ display:flex; align-items:center; gap:.55rem; text-decoration:none; color:var(--cream); }
+.on-light .brand{ color:var(--ink); }
+.brand .sun{ color:var(--gold-bright); }
+.on-light .brand .sun{ color:var(--gold); }
+.brand .wordmark{ font-family:var(--font-bn); font-weight:600; font-size:1.1rem; }
+.nav-links{ display:flex; gap:1.6rem; }
+.nav-links a{ text-decoration:none; color:var(--cream); font-size:.95rem; border-bottom:1px solid transparent; padding-bottom:2px; opacity:.85; }
+.on-light .nav-links a{ color:var(--ink); }
+.nav-links a:hover{ border-bottom-color:var(--gold-bright); opacity:1; }
+.nav-links a .bengali{ font-family:var(--font-bn); }
+.lang-toggle{ display:flex; align-items:center; gap:.4rem; }
+.lang-toggle button{ position:relative; display:inline-flex; align-items:center; justify-content:center; min-width:44px; min-height:44px; background:none; border:0; cursor:pointer; color:rgba(241,231,210,.6); font:inherit; font-size:.9rem; padding:.1rem .45rem; }
+.on-light .lang-toggle button{ color:var(--ink-soft); }
+.lang-toggle button.bengali{ font-family:var(--font-bn); }
+/* >=44px tap target; the active-language underline is drawn via ::after so it stays tight to the text */
+.lang-toggle button.is-active{ color:var(--cream); }
+.lang-toggle button.is-active::after{ content:""; position:absolute; left:.45rem; right:.45rem; bottom:8px; height:1.5px; border-radius:1px; background:var(--gold-bright); }
+.on-light .lang-toggle button.is-active{ color:var(--ink); }
+.on-light .lang-toggle button.is-active::after{ background:var(--gold); }
+.lang-toggle .sep{ color:rgba(234,201,127,.4); }
+@media (max-width:680px){ .nav-links{ display:none; } }
+
+/* ===== RINGS HERO (the dramatic centerpiece) ===== */
+.ring-hero{ position:relative; overflow:hidden; background:radial-gradient(120% 90% at 50% 18%, #16332650 0%, var(--forest-2) 46%, var(--forest-3) 100%); color:var(--cream); padding:3rem 1.5rem 4.5rem; min-height:94vh; display:flex; align-items:center; }
+.ring-hero::before{ content:""; position:absolute; inset:0; background:radial-gradient(closest-side at 32% 46%, rgba(234,201,127,.18), rgba(234,201,127,0) 70%); pointer-events:none; }
+.ring-hero-inner{ position:relative; z-index:2; max-width:64rem; margin:0 auto; width:100%; display:grid; grid-template-columns:minmax(300px,1fr) 1fr; gap:clamp(1.5rem,5vw,4rem); align-items:center; }
+.rings-stage{ position:relative; justify-self:center; width:min(86vw,440px); aspect-ratio:1; }
+.rings{ width:100%; height:100%; display:block; overflow:visible; animation:breathe 9s ease-in-out infinite; }
+@keyframes breathe{ 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.014); } }
+.ring{ fill:none; stroke:rgba(234,201,127,.32); stroke-width:1; opacity:0; transform-box:view-box; animation:ringIn 1.2s ease-out forwards; animation-delay:calc(var(--i)*.05s); }
+@keyframes ringIn{ from{ opacity:0; } to{ opacity:.5; } }
+.ring.is-live{ stroke:var(--gold-bright); stroke-width:1.8; filter:drop-shadow(0 0 4px rgba(234,201,127,.55)); animation-name:ringInLive; }
+@keyframes ringInLive{ from{ opacity:0; } to{ opacity:.95; } }
+.node-link{ cursor:pointer; }
+.node-halo{ fill:rgba(234,201,127,.18); transition:r .35s ease; }
+.node-dot{ fill:var(--gold-bright); filter:drop-shadow(0 0 7px rgba(234,201,127,.95)); transition:r .3s ease; }
+.node-link:hover .node-dot, .node-link:focus-visible .node-dot{ r:7.5; }
+.node-link:hover .node-halo{ r:22; }
+.node-label{ font-family:var(--font-bn); font-size:15px; fill:var(--cream); text-anchor:middle; opacity:0; transition:opacity .3s ease; paint-order:stroke; stroke:rgba(6,16,12,.85); stroke-width:4px; }
+.node-link:hover .node-label, .node-link:focus-visible .node-label{ opacity:1; }
+.rings-hint{ position:absolute; left:50%; bottom:-1.6rem; transform:translateX(-50%); white-space:nowrap; font-size:.74rem; letter-spacing:.12em; text-transform:uppercase; color:rgba(241,231,210,.5); }
+.rings-hint.bengali{ font-family:var(--font-bn); letter-spacing:.04em; text-transform:none; }
+
+.ring-copy{ max-width:30rem; }
+.ring-title{ font-family:var(--font-bn); font-weight:300; font-size:clamp(2.6rem,7vw,4.4rem); line-height:1.05; margin:0; color:#fff; }
+.ring-roman{ font-family:var(--font-display); font-weight:400; font-size:clamp(.9rem,2.4vw,1.15rem); letter-spacing:.36em; text-transform:uppercase; color:var(--gold-bright); margin:.8rem 0 0; }
+.ring-concept{ font-family:var(--font-display); font-style:italic; font-size:clamp(1.05rem,2.4vw,1.32rem); line-height:1.55; color:rgba(241,231,210,.92); margin:1.6rem 0 0; }
+.ring-concept.bengali{ font-family:var(--font-bn); font-style:normal; line-height:1.85; }
+.ring-featured{ margin:1.8rem 0 0; padding-top:1.5rem; border-top:1px solid rgba(234,201,127,.22); }
+.ring-featured .fp-label{ font-size:.7rem; letter-spacing:.22em; text-transform:uppercase; color:var(--gold-bright); }
+.ring-featured .fp-label.bengali{ font-family:var(--font-bn); letter-spacing:.06em; }
+.ring-featured .fp-quote{ font-family:var(--font-bn); font-size:clamp(1.15rem,2.6vw,1.5rem); line-height:1.6; margin:.6rem 0 0; color:#fff; }
+.ring-featured .fp-cta{ display:inline-flex; align-items:center; gap:.4rem; margin-top:1rem; font-size:.95rem; color:var(--gold-bright); text-decoration:none; border-bottom:1px solid var(--gold-bright); padding-bottom:1px; }
+.ring-featured .fp-cta.bengali{ font-family:var(--font-bn); }
+.scroll-cue{ display:inline-block; margin-top:2rem; color:var(--gold-bright); opacity:.7; }
+.scroll-cue svg{ display:block; animation:bob 2.4s ease-in-out infinite; }
+@media (max-width:820px){ .ring-hero-inner{ grid-template-columns:1fr; text-align:center; } .ring-copy{ margin:0 auto; }
+  .rings-stage{ order:-1; margin-bottom:2.4rem; } }
+
+/* ===== READING ROOM / ARCHIVE ===== */
+.reading-room{ background:var(--paper); padding:clamp(3.6rem,8vw,6rem) 1.5rem; }
+.archive-search{ max-width:50rem; margin:0 auto 1rem; }
+.archive-search input{ width:100%; font:inherit; font-size:1rem; padding:.65rem 1rem; border:1px solid #D8C9A8; border-radius:10px; background:#fff; color:var(--ink); }
+.archive-search input::placeholder{ color:#9b8a68; }
+.archive-search input:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; border-color:var(--gold); }
+.filters{ display:flex; gap:.55rem; justify-content:center; flex-wrap:wrap; margin:1.4rem auto 1.4rem; }
+.filter{ display:inline-flex; align-items:center; min-height:44px; font:inherit; font-size:.9rem; cursor:pointer; background:transparent; border:1px solid #D8C9A8; color:var(--ink-soft); padding:.3rem 1.1rem; border-radius:999px; transition:background .25s, color .25s, border-color .25s; }
+.filter .bengali{ font-family:var(--font-bn); }
+.filter:hover{ border-color:var(--gold); color:var(--ink); }
+.filter.is-active{ background:var(--gold); border-color:var(--gold); color:#fff; }
+.filter-count{ text-align:center; font-size:.86rem; color:var(--ink-soft); font-style:italic; margin:-.4rem 0 1.7rem; min-height:1.25em; }
+.filter-count .lang-bn{ font-style:normal; }
+.archive{ max-width:50rem; margin:0 auto; border-top:1px solid #E2D5BA; }
+.entry{ display:flex; align-items:baseline; justify-content:space-between; gap:1.2rem; padding:1.2rem .4rem; border-bottom:1px solid #E2D5BA; text-decoration:none; color:inherit; transition:background .25s, padding .25s; }
+.entry:hover{ background:rgba(234,201,127,.14); padding-left:.9rem; padding-right:.9rem; }
+.entry-ring{ flex:0 0 auto; width:34px; height:34px; opacity:.8; }
+.entry-main{ min-width:0; flex:1 1 auto; }
+.entry-title{ font-family:var(--font-display); font-size:1.18rem; color:var(--ink); }
+.entry-title.bengali{ font-family:var(--font-bn); font-weight:600; }
+.entry-roman{ font-size:.78rem; color:var(--ink-soft); letter-spacing:.04em; margin-left:.5rem; }
+.entry-first{ display:block; margin-top:.25rem; font-size:.9rem; color:var(--ink-soft); font-style:italic; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:32rem; }
+.entry-first.bengali{ font-family:var(--font-bn); font-style:normal; }
+.entry-aside{ text-align:right; white-space:nowrap; flex:0 0 auto; }
+.entry-type{ display:inline-block; font-size:.66rem; letter-spacing:.18em; text-transform:uppercase; color:var(--gold); }
+.entry-type.bengali{ font-family:var(--font-bn); letter-spacing:.05em; }
+.entry-date{ display:block; font-size:.8rem; color:var(--ink-soft); margin-top:.2rem; font-style:italic; }
+.entry-date.bengali{ font-family:var(--font-bn); font-style:normal; }
+.entry.is-hidden{ display:none; }
+@media (max-width:560px){
+  .entry{ flex-wrap:wrap; row-gap:.5rem; padding:1.1rem .2rem; }
+  .entry-aside{ flex:1 0 100%; text-align:left; white-space:normal; display:flex; gap:.7rem; align-items:baseline; padding-left:calc(34px + 1.2rem); }
+  .entry-date{ margin-top:0; }
+}
+.archive-note{ text-align:center; margin:1.8rem auto 0; font-size:.86rem; color:var(--ink-soft); font-style:italic; }
+.archive-note.bengali{ font-family:var(--font-bn); font-style:normal; }
+
+/* ===== THE POET ===== */
+.poet{ padding:clamp(3.6rem,8vw,6rem) 1.5rem; background:var(--paper-2); }
+.poet-grid{ display:flex; gap:2.4rem; align-items:flex-start; flex-wrap:wrap; justify-content:center; max-width:50rem; margin:2.4rem auto 0; }
+.frame{ margin:0; flex:0 0 auto; padding:8px; background:var(--paper); border:1px solid var(--gold); border-radius:4px; box-shadow:0 14px 36px rgba(40,30,12,.16); }
+.portrait{ display:block; width:210px; height:256px; object-fit:cover; object-position:center; border-radius:2px; background:var(--paper-2); }
+.frame figcaption{ text-align:center; margin-top:.8rem; }
+.cap-name{ font-family:var(--font-display); font-weight:500; font-size:1.05rem; color:var(--ink); }
+.cap-name.bengali{ font-family:var(--font-bn); font-weight:600; }
+.cap-role{ display:block; margin-top:.15rem; font-style:italic; font-size:.9rem; color:var(--ink-soft); }
+.cap-role.bengali{ font-family:var(--font-bn); font-style:normal; }
+.poet-text{ flex:1 1 300px; max-width:32rem; }
+.poet-text p{ margin:0 0 1rem; }
+.poet-text p.bengali{ font-family:var(--font-bn); line-height:1.95; }
+
+/* ===== FOOTER ===== */
+.site-footer{ background:var(--forest-3); color:var(--cream); text-align:center; padding:clamp(3rem,7vw,4.5rem) 1.5rem; }
+.site-footer .foot-sun{ color:var(--gold-bright); display:inline-block; margin-bottom:.4rem; }
+.site-footer .divider{ margin:0 auto 1.4rem; }
+.footer-line{ font-family:var(--font-display); font-size:1.12rem; max-width:34rem; margin:0 auto 1rem; color:var(--cream); }
+.footer-bn{ font-family:var(--font-bn); color:rgba(241,231,210,.72); font-size:1rem; max-width:34rem; margin:0 auto 1.6rem; line-height:1.9; }
+.copyright{ font-size:.82rem; color:rgba(241,231,210,.55); letter-spacing:.04em; }
+.copyright .bengali{ font-family:var(--font-bn); }
+
+/* ===== READING PAGE (individual poem / story) ===== */
+.read{ max-width:40rem; margin:0 auto; padding:clamp(2.5rem,7vw,5rem) 1.5rem clamp(3rem,8vw,6rem); }
+.read.story{ }
+.read-back{ display:inline-flex; align-items:center; gap:.45rem; font-size:.9rem; color:var(--ink-soft); text-decoration:none; margin-bottom:2.4rem; }
+.read-back:hover{ color:var(--gold); }
+.read-back .bengali{ font-family:var(--font-bn); }
+.read-eyebrow{ text-align:center; font-size:.74rem; letter-spacing:.22em; text-transform:uppercase; color:var(--gold); }
+.read-eyebrow.bengali{ font-family:var(--font-bn); letter-spacing:.08em; }
+.read-title{ text-align:center; font-family:var(--font-bn); font-weight:600; font-size:clamp(2rem,5.5vw,2.9rem); line-height:1.18; margin:.7rem 0 0; color:var(--ink); }
+.read-tick{ width:30px; height:1px; background:var(--gold); margin:1.5rem auto; }
+.read-verse{ font-family:var(--font-bn); font-size:1.18rem; line-height:2.1; color:var(--ink); text-align:center; }
+.read-verse.en{ font-family:var(--font-display); }
+.read-prose p{ margin:0 0 1.1rem; }
+.read-prose p.bengali{ font-family:var(--font-bn); line-height:1.95; }
+.read-prose p:first-of-type::first-letter{ float:left; font-family:var(--font-display); font-weight:600; font-size:3.1em; line-height:.78; padding:.05em .12em 0 0; color:var(--gold); }
+.read-meta{ text-align:center; margin-top:2rem; font-size:.86rem; letter-spacing:.03em; color:var(--ink-soft); font-style:italic; }
+.read-meta.bengali{ font-family:var(--font-bn); font-style:normal; }
+.read-note{ max-width:34rem; margin:2.4rem auto 0; padding:1.3rem 1.5rem; background:var(--paper-2); border-left:2px solid var(--gold); border-radius:0 4px 4px 0; font-size:.95rem; color:var(--ink-soft); }
+.read-note .bengali{ font-family:var(--font-bn); }
+.read-nav{ display:flex; justify-content:space-between; gap:1rem; max-width:40rem; margin:3rem auto 0; padding:1.5rem 1.5rem 0; border-top:1px solid #E2D5BA; }
+.read-nav a{ text-decoration:none; color:var(--ink-soft); font-size:.9rem; max-width:46%; }
+.read-nav a:hover{ color:var(--gold); }
+.read-nav .rn-dir{ display:block; font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:var(--gold); margin-bottom:.2rem; }
+.read-nav .rn-title{ font-family:var(--font-bn); }
+.read-nav .next{ text-align:right; margin-left:auto; }
+/* story reading uses forest */
+.read-page.forest{ background:var(--forest); color:var(--cream); }
+.read-page.forest .read-back{ color:rgba(241,231,210,.7); }
+.read-page.forest .read-back:hover{ color:var(--gold-bright); }
+.read-page.forest .read-title{ color:var(--cream); font-family:var(--font-display); font-weight:500; }
+.read-page.forest .read-eyebrow{ color:var(--gold-bright); }
+.read-page.forest .read-prose{ color:rgba(241,231,210,.92); }
+.read-page.forest .read-prose p:first-of-type::first-letter{ color:var(--gold-bright); }
+.read-page.forest .read-meta{ color:rgba(241,231,210,.7); }
+.read-page.forest .read-note{ background:rgba(255,255,255,.05); color:rgba(241,231,210,.82); }
+.read-page.forest .read-nav{ border-top-color:rgba(234,201,127,.2); }
+.read-page.forest .read-nav a{ color:rgba(241,231,210,.7); }
+.read-page.forest .read-tick{ background:var(--gold-bright); }
+
+/* motion */
+.reveal-up{ opacity:0; transform:translateY(20px); transition:opacity .8s ease, transform .8s ease; }
+.reveal-up.visible{ opacity:1; transform:none; }
+@keyframes bob{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(5px); } }
+@media (prefers-reduced-motion: reduce){
+  html{ scroll-behavior:auto; }
+  .reveal-up{ opacity:1; transform:none; transition:none; }
+  .rings, .ring, .ring.is-live, .scroll-cue svg{ animation:none !important; opacity:1; }
+}

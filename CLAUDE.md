@@ -2,98 +2,100 @@
 
 ## Project: সোনা রোদ্দুর · Sona Roddur
 
-A single-page, static, **bilingual (বাংলা / English)** web portal presenting the
-poetry and short stories of **Dr. Quazi Nazru Islam** (the repo owner's father) —
-a forest scientist (Bangladesh Forest Research Institute) and poet. This is a
-personal/literary site, not an application.
+A **bilingual (বাংলা / English)** literary portal for the poetry and short stories of
+**Dr. Quazi Nazrul Islam** (the repo owner's father) — a forest scientist (Bangladesh
+Forest Research Institute) and poet. A personal/literary site, not an application.
 
-## The whole site is one file
+The signature idea: a forest scientist reads a life in a tree's rings, so his writing is
+presented as glowing **growth-rings of light** — each lit ring is a piece, the body of work
+growing ring by ring. Golden light (poems) in the forest dark (stories).
 
-- `index.html` **is** the entire website — self-contained, with **no build step,
-  no dependencies, and no framework**. All CSS is in one `<style>` block; all JS
-  is one inline `<script>` at the bottom. To work on it: edit the file and open
-  it in a browser.
-- The only external requests are Google Fonts (Fraunces, Spectral, Noto Serif
-  Bengali). Everything else — including the portrait, embedded as a base64
-  `data:` URI — is inline so the page never has a broken link.
-- Two image files exist **only** for social-share link previews (Open Graph
-  crawlers cannot read the inline base64 portrait):
-  - `images/dr-qnislam.jpg` — the original full-resolution portrait (archived source).
-  - `portrait.jpg` — a derived, optimized **baseline** JPEG (~1200px) that the
-    `og:image` / `twitter:image` tags point to. It is baseline (not progressive)
-    on purpose: WhatsApp's preview generator can fail to render progressive JPEGs.
-  - To regenerate after changing the portrait:
-    `magick images/dr-qnislam.jpg -auto-orient -resize 1200x1200 -strip -interlace none -sampling-factor 4:2:0 -quality 86 portrait.jpg`
-    then update the `og:image:width`/`height` tags to the new dimensions.
+## Architecture — static, multi-page, no build
 
-## Hosting / deploy
+Plain static HTML/CSS/JS: **no framework, no bundler, no build step.** The only external
+request is Google Fonts. Served as-is by GitHub Pages.
 
-- Hosted on **GitHub Pages**. The repo is named `sonaroddur.github.com` (the
-  legacy GitHub user-site convention); GitHub serves it at the clean root URL
-  **https://sonaroddur.github.io/**.
-- Pages source = **`main` branch, root path**. Updating `main` (via a merged PR)
-  auto-rebuilds and redeploys (~1 minute). Only `main` is published — feature
-  branches never affect the live site.
-- After a deploy, hard-refresh to bypass the browser/CDN cache.
+```
+index.html               home: the "Rings of Light" hero + searchable, filterable archive
+poems/<slug>.html        one reading page per poem
+stories/<slug>.html      one reading page per story
+assets/css/site.css      all styles (design tokens + components)
+assets/js/site.js        all behaviour (language, search, filter, rings, scroll-reveal)
+assets/img/portrait.jpg  optimised baseline JPEG — the social-share / bio image
+assets/img/dr-qnislam.jpg  original full-res portrait (archived source)
+tests/                   Playwright end-to-end tests
+README.md  CLAUDE.md  .gitignore
+```
 
-## Contributing — git workflow (IMPORTANT)
+All asset paths and links are **root-absolute** (`/assets/…`, `/poems/…`, `/`) so they work
+from any page and map 1:1 to the GitHub Pages site root.
 
-`main` is the **live** branch: GitHub Pages publishes it automatically (see
-*Hosting / deploy* above). To protect the live site, **every** change — content
-or code, however small — follows this flow:
+## How the home page works
 
-1. **Never commit or push directly to `main`.** No exceptions, not even a
-   one-line fix or a typo.
-2. **Work on a feature branch** (e.g. `add-poem-<slug>`, `fix/...`, `docs/...`).
-3. **Get the owner's review and approval BEFORE opening a PR.** Prepare the
-   change on the branch, show the diff and a short summary, and wait for an
-   explicit go-ahead. Do **not** run `gh pr create` until then.
-4. **Then open a Pull Request into `main`.** Merging the PR is what deploys to
-   the live site.
-
-Two gates stand before anything goes live: the owner reviews the change *before*
-the PR is opened, and the PR merge is the final gate.
+- **Rings hero** — `site.js` reads the `<script type="application/json" id="pieces">` block in
+  `index.html` and draws the SVG rings + one clickable node per featured piece.
+- **Archive** — a list of `.entry` links (one per piece, `data-type="poetry|story"`). `site.js`
+  powers **search** (`.archive-search input`, matches title/first-line text) and the **type
+  filter** (`.filter` chips) together, with a live count (`.filter-count`).
 
 ## How to add the poet's work
 
-Edit `index.html` and find these comment markers — each sits next to a working
-example that shows the exact pattern to copy:
-
-- `[ADD A POEM]` — Poetry section (`#poetry`). Bengali poem: keep
-  `class="bengali"` + `lang="bn"` on the title and verse. English poem: drop
-  them. Separate lines with `<br>`.
-- `[ADD A STORY]` — Short Stories section (`#stories`). A short teaser, then the
-  full text inside `.story-body`; **keep the `hidden` attribute** (the Read/Close
-  button toggles it).
-- `[OPENING LINE]` — the large epigraph verse near the top.
-- `[THE POET]` — portrait + biography.
-- Dates in `.piece-meta` use Bengali numerals (e.g. ১৯ জুন ২০২৬).
+1. **Reading page** — copy an existing `poems/*.html` (or `stories/*.html`); update the title,
+   the per-piece `<meta og:*>` (title/description/url so single-piece sharing works), the
+   verse/prose, and the date. Keep both languages for chrome text.
+2. **Archive row** — copy an existing `.entry` in `index.html`; set `data-type`, title,
+   romanization, first line, type, and date (Bengali numerals in the `.lang-bn` date).
+3. **(Optional) feature it on the rings** — add an item to the `#pieces` JSON
+   (`t_bn`, `t_en`, `href`, `ring`, `angle`, `type`).
+4. Run the tests, then open a PR.
 
 ## Bilingual system (বাংলা / English)
 
-- `<html data-lang="en">` holds the active language; the header toggle flips it
-  to `bn`.
-- Mark language-specific content with `class="lang-en"` / `class="lang-bn"`. CSS
-  shows the one matching `data-lang` and hides the other. **Always provide both**
-  for any new user-facing text.
-- Bengali text also needs `class="bengali"` (the Bengali font) and `lang="bn"`.
+- `<html data-lang="en">` is the active language; the header toggle flips it to `bn`.
+- Wrap language-specific text in `class="lang-en"` / `class="lang-bn"`; CSS force-hides the
+  inactive one (`[data-lang="en"] .lang-bn{ display:none !important }`). **Always provide both.**
+- Bengali text also gets `class="bengali"` (font) and `lang="bn"`.
 
-## Design language (keep the metaphor intact)
+## Design language (keep the metaphor)
 
-- Two worlds meet on the page: **poems sit in golden light on warm paper;
-  stories sit in cool forest green.** Forest sections use `class="section forest"`.
-- The palette and fonts are CSS variables in `:root` (`--paper`, `--gold`,
-  `--forest`; `--font-display` = Fraunces, `--font-body` = Spectral, `--font-bn`
-  = Noto Serif Bengali). Reuse them rather than hardcoding values.
-- Preserve accessibility: keep the `aria-*` labels, the `prefers-reduced-motion`
-  guard, and `lang` attributes. Reveal-on-scroll uses an IntersectionObserver.
+- Poems = golden light on warm paper; stories = cool forest green (`body.read-page.forest`).
+- Tokens are CSS variables in `:root` of `site.css` (`--paper`, `--gold`, `--forest`;
+  `--font-display` Fraunces, `--font-body` Spectral, `--font-bn` Noto Serif Bengali). Reuse them.
+- Accessibility is a requirement: `aria-*`, `aria-pressed` on toggle/filter, ≥44px tap targets,
+  bilingual `aria-label`s, and the `prefers-reduced-motion` guard. Reveal-on-scroll uses
+  IntersectionObserver.
 
-## Conventions
+## Scaling (as the collection grows)
 
-- Keep it a **single self-contained `index.html`** — no external JS/CSS deps
-  beyond Google Fonts, no framework, no bundler.
-- Changes reach the live site only through a reviewed PR into `main` (see
-  *Contributing — git workflow*) — never commit to `main` directly. Do **not**
-  commit `.DS_Store` (gitignored).
-- The social-share meta tags (Open Graph / Twitter) live in `<head>`; their
-  absolute URLs must stay `https://sonaroddur.github.io/...`.
+- **Highlights stay curated** (a few `#pieces` on the rings); the **archive is the workhorse**.
+- The rings are meant to map to **years**, not individual pieces (bounded by a lifetime); busy
+  years glow brighter. The **archive is the authoritative way to reach a single piece** — search
+  + filter now, plus group-by-year + pagination when the list grows long.
+
+## Social-share image
+
+`assets/img/portrait.jpg` is a **baseline** (not progressive) ~1200px JPEG — WhatsApp can fail
+to render progressive JPEGs. Every page's `og:image` points at it. Regenerate from the original:
+`magick assets/img/dr-qnislam.jpg -auto-orient -resize 1200x1200 -strip -interlace none -sampling-factor 4:2:0 -quality 86 assets/img/portrait.jpg`
+
+## Tests
+
+Playwright end-to-end tests in `tests/` cover the language toggle, search, type filter + count,
+rings rendering, no-404 links, per-page OG tags, and mobile (no horizontal overflow):
+`cd tests && npm install && npx playwright test`
+
+## Hosting / deploy
+
+GitHub Pages serves the repo root at **https://sonaroddur.github.io/** (the legacy
+`*.github.com` user-site name resolves to the `.github.io` root). Source = `main`, root path;
+updating `main` redeploys in ~1 minute.
+
+## Contributing — git workflow (IMPORTANT)
+
+`main` is the **live** branch. **Never commit or push directly to `main`.** Every change:
+1. Work on a feature branch.
+2. **Get the owner's (nashid) review and approval BEFORE opening a PR.**
+3. Then open a PR into `main`; merging it deploys. A local `pre-push` hook also blocks direct
+   pushes to `main` (override only in emergencies with `git push --no-verify`).
+
+Don't commit `.DS_Store`, `tests/node_modules/`, or local screenshots (all gitignored).

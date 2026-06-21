@@ -47,11 +47,14 @@ a:focus-visible, button:focus-visible{ outline:2px solid var(--gold); outline-of
 .nav-links a:hover{ border-bottom-color:var(--gold-bright); opacity:1; }
 .nav-links a .bengali{ font-family:var(--font-bn); }
 .lang-toggle{ display:flex; align-items:center; gap:.4rem; }
-.lang-toggle button{ background:none; border:0; cursor:pointer; color:rgba(241,231,210,.6); font:inherit; font-size:.9rem; padding:.1rem .15rem; }
+.lang-toggle button{ position:relative; display:inline-flex; align-items:center; justify-content:center; min-width:44px; min-height:44px; background:none; border:0; cursor:pointer; color:rgba(241,231,210,.6); font:inherit; font-size:.9rem; padding:.1rem .45rem; }
 .on-light .lang-toggle button{ color:var(--ink-soft); }
 .lang-toggle button.bengali{ font-family:var(--font-bn); }
-.lang-toggle button.is-active{ color:var(--cream); border-bottom:1.5px solid var(--gold-bright); }
-.on-light .lang-toggle button.is-active{ color:var(--ink); border-bottom-color:var(--gold); }
+/* >=44px tap target; the active-language underline is drawn via ::after so it stays tight to the text */
+.lang-toggle button.is-active{ color:var(--cream); }
+.lang-toggle button.is-active::after{ content:""; position:absolute; left:.45rem; right:.45rem; bottom:8px; height:1.5px; border-radius:1px; background:var(--gold-bright); }
+.on-light .lang-toggle button.is-active{ color:var(--ink); }
+.on-light .lang-toggle button.is-active::after{ background:var(--gold); }
 .lang-toggle .sep{ color:rgba(234,201,127,.4); }
 @media (max-width:680px){ .nav-links{ display:none; } }
 

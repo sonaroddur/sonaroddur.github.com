@@ -3,7 +3,7 @@
 ## Project: সোনা রোদ্দুর · Sona Roddur
 
 A **bilingual (বাংলা / English)** literary portal for the poetry and short stories of
-**Dr. Quazi Nazru Islam** (the repo owner's father) — a forest scientist (Bangladesh
+**Dr. Quazi Nazrul Islam** (the repo owner's father) — a forest scientist (Bangladesh
 Forest Research Institute) and poet. A personal/literary site, not an application.
 
 The signature idea: a forest scientist reads a life in a tree's rings, so his writing is

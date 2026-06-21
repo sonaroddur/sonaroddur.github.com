@@ -1,6 +1,6 @@
 # সোনা রোদ্দুর · Sona Roddur
 
-The poetry and short stories of **Dr. Quazi Nazru Islam** — forest scientist and poet.
+The poetry and short stories of **Dr. Quazi Nazrul Islam** — forest scientist and poet.
 A bilingual (বাংলা / English) literary site. Live at **https://sonaroddur.github.io/**.
 
 ## What it is
